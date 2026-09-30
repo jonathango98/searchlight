@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+searchlight.db
+searchlight.db-wal
+searchlight.db-shm
+models/*.task
+models/*.tflite
+renders/
+recordings/
+.DS_Store

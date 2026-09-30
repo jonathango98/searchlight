@@ -1,0 +1,9 @@
+# mediapipe 1.x crashes on macOS arm64 ("DrishtiMetalHelper ... Service is
+# unavailable") when the face detector graph opens. The 0.10 line works.
+mediapipe>=0.10.14,<1.0
+numpy<2                      # mediapipe 0.10 is not built against numpy 2.x
+# The *headless* opencv build: the regular wheels bundle their own SDL2, whose
+# ObjC classes collide with pygame's. See the import-order note in camera.py.
+opencv-contrib-python-headless>=4.9
+pygame>=2.5
+pytest>=8.0
