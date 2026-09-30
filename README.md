@@ -12,21 +12,24 @@ A two-screen arcade game where players keep their head inside a wandering square
 ## Setup
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-./scripts/fetch_models.sh         # MediaPipe face & pose models, ~8 MB total
-./scripts/fetch_fonts.sh          # Download OFL fonts for arcade look
+git clone https://github.com/jonathango98/searchlight.git
+cd searchlight
+./install.sh
 ```
+
+`install.sh` does everything once: finds a supported Python, creates `.venv`, installs the packages, downloads the MediaPipe models (~9 MB) and checks the result. It is safe to re-run.
+
+**Python 3.10–3.12 is required (3.11 recommended).** mediapipe 0.10 needs numpy 1.x, which has no builds for Python 3.13 or newer. The installer skips a newer default `python3` and looks for `python3.11`, `python3.12` or `python3.10`. On a Mac with Homebrew and none of those, it runs `brew install python@3.11` for you. Otherwise it says what to install. To choose the interpreter yourself: `PYTHON=/path/to/python3.11 ./install.sh`.
 
 On macOS the terminal needs camera access: **System Settings → Privacy & Security → Camera**. Without it the capture silently yields black frames rather than raising an error, so check there first if the preview stays dark.
 
 ## Running
 
 ```bash
-python3 run_searchlight.py              # both windows, cascaded (default)
-python3 run_searchlight.py --dev        # mouse stands in for your head (testing)
-python3 run_searchlight.py --fullscreen # kiosk mode: game on display 0, board on display 1
-python3 run_searchlight.py --fullscreen --game-display 1 --board-display 0  # swap displays
+.venv/bin/python run_searchlight.py              # both windows, cascaded (default)
+.venv/bin/python run_searchlight.py --dev        # mouse stands in for your head (testing)
+.venv/bin/python run_searchlight.py --fullscreen # kiosk mode: game on display 0, board on display 1
+.venv/bin/python run_searchlight.py --fullscreen --game-display 1 --board-display 0  # swap displays
 ```
 
 Window positioning in windowed mode (the default):
@@ -168,4 +171,4 @@ The windows are separate processes so each can claim a display with the plain `s
 Two version constraints are load-bearing, both pinned in `requirements.txt`:
 
 - **mediapipe must be < 1.0.** The 1.x face detector crashes on macOS arm64 (`DrishtiMetalHelper ... Service is unavailable`) as the graph opens.
-- **opencv must be the headless build.** The regular wheels bundle their own SDL2, whose Objective-C classes collide with pygame's; the runtime binds duplicate class names to whichever registers first. Both entry points import pygame before anything that pulls in cv2, so pygame's SDL wins.
+- **opencv must be the headless build.** The regular wheels bundle their own SDL2, whose Objective-C classes collide with pygame's; the runtime binds duplicate class names to whichever registers first. Both entry points import pygame before anything that pulls in cv2, so pygame's SDL wins. mediapipe depends on the regular build, so `install.sh` removes it after installing. From 4.13 the headless macOS wheels bundle SDL2 as well, so opencv is pinned below 4.12.

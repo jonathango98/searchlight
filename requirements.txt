@@ -4,6 +4,8 @@ mediapipe>=0.10.14,<1.0
 numpy<2                      # mediapipe 0.10 is not built against numpy 2.x
 # The *headless* opencv build: the regular wheels bundle their own SDL2, whose
 # ObjC classes collide with pygame's. See the import-order note in camera.py.
-opencv-contrib-python-headless>=4.9
+# Below 4.12: from 4.13 even the headless macOS wheels bundle SDL2, and 4.11 is
+# the tested version. install.sh checks for a bundled SDL2 either way.
+opencv-contrib-python-headless>=4.9,<4.12
 pygame>=2.5
 pytest>=8.0
